@@ -23,8 +23,10 @@ class Config(object):
     access_key = ""
     secret_key = ""
     access_token = ""
-    host_base = "s3.amazonaws.com"
-    host_bucket = "%(bucket)s.s3.amazonaws.com"
+    host_base = "localhost:5000"
+    #host_base = "s3.amazonaws.com"
+    host_bucket = "%(bucket).localhost:5000"
+    #host_bucket = "%(bucket)s.s3.amazonaws.com"
     simpledb_host = "sdb.amazonaws.com"
     cloudfront_host = "cloudfront.amazonaws.com"
     verbosity = logging.WARNING
@@ -98,7 +100,8 @@ class Config(object):
     invalidate_default_index_root_on_cf = True
     website_index = "index.html"
     website_error = ""
-    website_endpoint = "http://%(bucket)s.s3-website-%(location)s.amazonaws.com/"
+    #website_endpoint = "http://%(bucket)s.s3-website-%(location)s.amazonaws.com/"
+    website_endpoint = "http://%(bucket)s.s3-SEEME---website-%(location)s.amazonaws.com/"
     additional_destinations = []
     files_from = []
     cache_file = ""

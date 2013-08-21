@@ -194,12 +194,19 @@ class S3(object):
 
     def get_hostname(self, bucket):
         if bucket and check_bucket_name_dns_conformity(bucket):
+            print "get_hostname 1"
             if self.redir_map.has_key(bucket):
+            	print "get_hostname 1-1"
                 host = self.redir_map[bucket]
             else:
+            	print "get_hostname 1-2"
                 host = getHostnameFromBucket(bucket)
+		print "host =", host
         else:
+            print "get_hostname 2"
             host = self.config.host_base
+	# FIX: We put some manual transformation here... temporarily.
+	host = host.replace('s3.amazonaws.com', 'localhost:5000')
         debug('get_hostname(%s): %s' % (bucket, host))
         return host
 
@@ -678,7 +685,7 @@ class S3(object):
             raise
         except Exception, e:
             if retries:
-                warning("Retrying failed request: %s (%s)" % (resource['uri'], e))
+                warning("Retrying failed request(1): %s (%s)" % (resource['uri'], e))
                 warning("Waiting %d sec..." % self._fail_wait(retries))
                 time.sleep(self._fail_wait(retries))
                 return self.send_request(request, body, retries - 1)
@@ -696,7 +703,7 @@ class S3(object):
         if response["status"] >= 500:
             e = S3Error(response)
             if retries:
-                warning(u"Retrying failed request: %s" % resource['uri'])
+                warning(u"Retrying failed request(2): %s" % resource['uri'])
                 warning(unicode(e))
                 warning("Waiting %d sec..." % self._fail_wait(retries))
                 time.sleep(self._fail_wait(retries))
@@ -729,7 +736,7 @@ class S3(object):
             if self.config.progress_meter:
                 progress.done("failed")
             if retries:
-                warning("Retrying failed request: %s (%s)" % (resource['uri'], e))
+                warning("Retrying failed request(3): %s (%s)" % (resource['uri'], e))
                 warning("Waiting %d sec..." % self._fail_wait(retries))
                 time.sleep(self._fail_wait(retries))
                 # Connection error -> same throttle value
@@ -884,7 +891,7 @@ class S3(object):
             if self.config.progress_meter:
                 progress.done("failed")
             if retries:
-                warning("Retrying failed request: %s (%s)" % (resource['uri'], e))
+                warning("Retrying failed request(4): %s (%s)" % (resource['uri'], e))
                 warning("Waiting %d sec..." % self._fail_wait(retries))
                 time.sleep(self._fail_wait(retries))
                 # Connection error -> same throttle value
@@ -936,7 +943,7 @@ class S3(object):
             if self.config.progress_meter:
                 progress.done("failed")
             if retries:
-                warning("Retrying failed request: %s (%s)" % (resource['uri'], e))
+                warning("Retrying failed request(5): %s (%s)" % (resource['uri'], e))
                 warning("Waiting %d sec..." % self._fail_wait(retries))
                 time.sleep(self._fail_wait(retries))
                 # Connection error -> same throttle value

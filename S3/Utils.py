@@ -141,6 +141,7 @@ def dateS3toUnix(date):
     ## FIXME: This should be timezone-aware.
     ## Currently the argument to strptime() is GMT but mktime()
     ## treats it as "localtime". Anyway...
+    debug("dateS3toUnix")
     return time.mktime(dateS3toPython(date))
 __all__.append("dateS3toUnix")
 
@@ -172,13 +173,16 @@ def formatDateTime(s3timestamp):
         tz = pytz.timezone('UTC')
         ## Can't unpack args and follow that with kwargs in python 2.5
         ## So we pass them all as kwargs
+	debug("formatDateTime: " + s3timestamp)
         params = zip(('year', 'month', 'day', 'hour', 'minute', 'second', 'tzinfo'),
                      dateS3toPython(s3timestamp)[0:6] + (tz,))
         params = dict(params)
         utc_dt = datetime.datetime(**params)
         dt_object = utc_dt.astimezone(timezone)
     except ImportError:
+	debug("Exception routine. formatDateTime: " + s3timestamp)
         dt_object = datetime.datetime(*dateS3toPython(s3timestamp)[0:6])
+	debug("After Exception")
     return dt_object.strftime("%Y-%m-%d %H:%M")
 __all__.append("formatDateTime")
 
@@ -456,6 +460,7 @@ def getBucketFromHostname(hostname):
 __all__.append("getBucketFromHostname")
 
 def getHostnameFromBucket(bucket):
+    print Config.Config().host_bucket
     return Config.Config().host_bucket % { 'bucket' : bucket }
 __all__.append("getHostnameFromBucket")
 

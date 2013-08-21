@@ -117,6 +117,7 @@ def cmd_buckets_list_all_all(args):
 
 def subcmd_buckets_list_all(s3):
     response = s3.list_all_buckets()
+    debug("subcmd_buckets_list_all")
     for bucket in response["list"]:
         output(u"%s  s3://%s" % (
             formatDateTime(bucket["CreationDate"]),
@@ -164,6 +165,7 @@ def subcmd_bucket_list(s3, uri):
                     pass
 
         size, size_coeff = formatSize(object["Size"], Config().human_readable_sizes)
+	print "LastModified: " + object["LastModified"]
         output(format_string % {
             "timestamp": formatDateTime(object["LastModified"]),
             "size" : str(size),
